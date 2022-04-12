@@ -30,7 +30,7 @@ public class CoinSpawner : MonoBehaviour
     public void SpawnCoin()
     {
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(GetRandomSpawnLocation(), out hit, 1.0f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(GetRandomSpawnLocation(), out hit, 10.0f, NavMesh.AllAreas))
         {
             Vector3 result = hit.position;
             Instantiate(CoinPrefab, result, Quaternion.identity);

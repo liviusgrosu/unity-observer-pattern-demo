@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
-    public int score;
+    private int score;
+    public Text scoreUI;
 
     public void Start()
     {
@@ -14,5 +16,11 @@ public class Score : MonoBehaviour
     public void IncrementScore()
     {
         score++;
+        scoreUI.text = $"Score: {score}";
+    }
+
+    public void OnDisable()
+    {
+        Coin.CoinCollected -= IncrementScore;
     }
 }

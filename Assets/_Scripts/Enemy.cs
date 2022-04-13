@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _speed = 4f;
     private NavMeshAgent _agent;
 
-    
+    public static event Action EnemyTouched;
 
     // Start is called before the first frame update
     void Awake()
@@ -37,9 +38,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-
+        if (other.gameObject.tag == "Player")
+        {
+            EnemyTouched?.Invoke();
+        }
     }
 
 

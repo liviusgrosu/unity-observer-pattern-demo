@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -27,6 +29,11 @@ public class UIManager : MonoBehaviour
         // Toggle the game over screen
         GameOverScreen.SetActive(true);
         scoreGameOverUI.text = $"Score: {score}";
+    }
+
+    public void RestartButtonPress()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void OnDisable()

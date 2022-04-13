@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private Transform _currentTarget;
     private int _currentPatrolPoint;
     [SerializeField] private float _speed = 4f;
+    private float _currentSpeed;
     private NavMeshAgent _agent;
 
     public static event Action EnemyTouched;
@@ -18,11 +19,13 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _agent.speed = _speed;
+        _currentSpeed = _speed;
+        _agent.speed = _currentSpeed;
     }
 
     void Start()
     {
+        Coin.CoinCollected += IncreaseEnemyMovement;
         // Start by going to a patrol point
         GoToNextPoint();
     }
@@ -46,11 +49,21 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void IncreaseEnemyMovement()
+    {
+        _currentSpeed += 0.5f;
+        _agent.speed = _currentSpeed;
+    }
 
     private void GoToNextPoint()
     {
         // Get next point of patrol
         _currentTarget = _patrolPath.GetPointPos(_currentPatrolPoint);
         _agent.destination = _currentTarget.position;
+    }
+
+    public void OnDisable()
+    {
+        Coin.CoinCollected -= IncreaseEnemyMovement;
     }
 }

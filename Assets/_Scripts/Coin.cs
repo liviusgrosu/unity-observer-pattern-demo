@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
@@ -18,6 +16,9 @@ public class Coin : MonoBehaviour
         // Get the two offsets for this movement
         _pointA = transform.position + heightOffsetVector;
         _pointB = new Vector3(transform.position.x, transform.position.y + UnityEngine.Random.Range(0.1f, 0.3f), transform.position.z) + heightOffsetVector;
+
+        // Subscribe to the scene change event
+        UIManager.SceneChanged += OnApplicationQuit;
     }
 
     private void FixedUpdate() {
@@ -41,7 +42,6 @@ public class Coin : MonoBehaviour
         // Invoke any observors of the coin being collected
         if (!_quitting)
         {
-            Debug.Log("here?");
             CoinCollected?.Invoke();
         }
     }

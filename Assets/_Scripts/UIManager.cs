@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -10,6 +9,7 @@ public class UIManager : MonoBehaviour
     private int _score;
     [SerializeField] private GameObject _gameOverScreen;
     [SerializeField] private Text _scoreOverlayUI, _scoreGameOverUI;
+    public static event Action SceneChanged;
 
     public void Start()
     {
@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
 
     public void RestartButtonPress()
     {
+        SceneChanged?.Invoke();
         // Restart the game
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

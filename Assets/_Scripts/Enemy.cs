@@ -7,30 +7,30 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private PatrolPath _patrolPath;
+    private static float _speed = 4f;
+    private float _currentSpeed;
     private Transform _currentTarget;
     private int _currentPatrolPoint;
-    [SerializeField] private float _speed = 4f;
-    private float _currentSpeed;
     private NavMeshAgent _agent;
 
     public static event Action EnemyTouched;
 
-    // Start is called before the first frame update
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        // Set speed of agent
         _currentSpeed = _speed;
         _agent.speed = _currentSpeed;
     }
 
     void Start()
     {
+        // Add as observer when coin is collected
         Coin.CoinCollected += IncreaseEnemyMovement;
         // Start by going to a patrol point
         GoToNextPoint();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Vector3.Distance(transform.position, _agent.destination) <= 0.5f)
@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Trigger observors when player touches this gameobject
         if (other.gameObject.tag == "Player")
         {
             EnemyTouched?.Invoke();
@@ -51,6 +52,7 @@ public class Enemy : MonoBehaviour
 
     private void IncreaseEnemyMovement()
     {
+        // Increase the difficulty when coin is collected by increasing the agents speed
         _currentSpeed += 0.5f;
         _agent.speed = _currentSpeed;
     }

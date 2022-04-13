@@ -5,47 +5,31 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public bool x, y, z;
-    public float speed;
-
-    public bool floatUpAndDown;
-    Vector3 pointA, pointB;
-    public float heightOffset;
-
-    private bool quitting;
-
+    public static float _speed = 4f;
+    private static float _heightOffset = 1f;
+    private Vector3 _pointA, _pointB;
+    private bool _quitting;
     public static event Action CoinCollected;
 
     private void Start() {
-        Vector3 heightOffsetVector = new Vector3(0f, heightOffset, 0f);
+        // Get offset for 'moving up and down' movement
+        Vector3 heightOffsetVector = new Vector3(0f, _heightOffset, 0f);
         
-        pointA = transform.position + heightOffsetVector;
-        pointB = new Vector3(transform.position.x, transform.position.y + UnityEngine.Random.Range(0.1f, 0.3f), transform.position.z) + heightOffsetVector;
+        // Get the two offsets for this movement
+        _pointA = transform.position + heightOffsetVector;
+        _pointB = new Vector3(transform.position.x, transform.position.y + UnityEngine.Random.Range(0.1f, 0.3f), transform.position.z) + heightOffsetVector;
     }
 
     private void FixedUpdate() {
-        //Spin the object depending on what axis the user requested in edit mode
-        if (x) 
-        {
-            transform.Rotate(speed, 0, 0);
-        }
-        if (y)
-        {
-            transform.Rotate(0, speed, 0);
-        } 
-        if (z)
-        {
-            transform.Rotate(0, 0, speed);
-        }
-
-        if(floatUpAndDown) 
-        {
-            transform.position = Vector3.Lerp(pointA, pointB, Mathf.PingPong(Time.time, 1));
-        }
+        //Spin the object on the y-axis
+        transform.Rotate(0, _speed, 0);
+        // Oscillate coin up and down
+        transform.position = Vector3.Lerp(_pointA, _pointB, Mathf.PingPong(Time.time, 1));
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        // Destroy the coin when in contact with the player
         if (other.tag == "Player")
         {
             Destroy(gameObject);
@@ -54,14 +38,17 @@ public class Coin : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (!quitting)
+        // Invoke any observors of the coin being collected
+        if (!_quitting)
         {
+            Debug.Log("here?");
             CoinCollected?.Invoke();
         }
     }
 
     private void OnApplicationQuit()
     {
-        quitting = true;
+        // Ensure that action doesnt trigger when closing the game
+        _quitting = true;
     }
 }

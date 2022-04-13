@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed;
+    [SerializeField] private float _speed;
     private Rigidbody _rb;
-    private bool inputOff;
+    private bool _inputOff;
 
     // Start is called before the first frame update
     void Start()
@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (inputOff)
+        if (_inputOff)
         {
             // Stop all input
             _rb.velocity = Vector3.zero;
@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
         if (movementDirection != Vector3.zero)
         {        
             // Apply speed to rigidbody velocity
-            _rb.velocity = movementDirection * speed;
+            _rb.velocity = movementDirection * _speed;
         }
         else 
         {
@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
 
     private void TurnOffInput()
     {
-        inputOff = true;
+        // Disable player input
+        _inputOff = true;
     }
 }
